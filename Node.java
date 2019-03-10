@@ -1,18 +1,21 @@
 
 public class Node {
 	
-	private int [][] state;
+	//private int [][] state;
+	private Graph state;
 	private Node parentNode;
 	private String actionTaken;
 	private int pathCost;
+	private Pair<Integer,Integer> coordinatesMove;
 	
 
-	public Node(int[][]currentState, Node parent, String action, int cost) {
+	public Node(Graph currentState, Node parent, String action, int cost, Pair<Integer,Integer> coordinates) {
 		// TODO Auto-generated constructor stub
 		state = currentState;
 		parentNode = parent;
 		actionTaken = action;
 		pathCost = cost;
+		coordinatesMove = coordinates;
 	}
 	
 	public Node getParentNode(){
@@ -23,22 +26,13 @@ public class Node {
 		parentNode = parent;
 	}
 	
-	public int[][] getState(){
+	public Graph getState(){
 		return state;
 	}
 	
-	public void printState(){
-		for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                System.out.print(state[i][j] + "\t");
-            }
-            System.out.println();
-        }
-        System.out.println();
-	}
 	
-	public void setState(int[][] state){
-		state = state;
+	public void setState(Graph stateSet){
+		state = stateSet;
 	}
 	
 	public int getPathCost(){
@@ -55,6 +49,14 @@ public class Node {
 	
 	public void setAction(String action){
 		actionTaken = action;
+	}
+	
+	public Pair<Integer, Integer> getCoordinates(){
+		return coordinatesMove;
+	}
+	
+	public void setCoordinates(Pair<Integer, Integer> coordinates){
+		coordinatesMove = coordinates;
 	}
 
 }

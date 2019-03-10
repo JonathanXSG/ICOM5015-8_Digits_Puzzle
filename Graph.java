@@ -1,5 +1,104 @@
+import java.util.ArrayList;
 
+/**
+ * Data structure for holding and manipulating the board
+ */
 public class Graph{
-//  Create data structure for holding the board, getting neighbors and modifying
+    private int[][] numbers;
+    private int size;
+    private Solution solution;
+
+    /**
+     * Constructor for creating a Graph object of size 3x3.
+     * @param solution On of the two possible solutions.
+     */
+    public Graph(Solution solution){
+        numbers = new int[3][3];
+        this.size = 3;
+        this.solution = solution;
+        createBoard();
+    }
+
+    private void createBoard() {
+        if (solution == Solution.Middle_Blank) {
+            numbers = new int[][]{{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
+        } else {
+            numbers = new int[][]{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
+        }
+    }
+
+    /**
+     * Method for moving a number on the board given the coordinates of the two numbers to swap.
+     * @param startX    X coordinate of number to move
+     * @param startY    Y coordinate of number to move
+     * @param endX      X coordinate of the place to move the number to
+     * @param endY      Y coordinate of the place to move the number to
+     */
+    public void moveNumber(int startX, int startY, int endX, int endY){
+        numbers[startY][startX] = (numbers[startY][startX] + numbers[endY][endX]) - (numbers[endY][endX] = numbers[startY][startX]);
+    }
+
+    /**
+     * Method for moving a number on the board given the coordinates of the two numbers to swap.
+     * @param startPos  Coordinates in Pair of number to move
+     * @param endPos    Coordinates in Pair of the place to move the number to
+     */
+    public void moveNumber(Pair<Integer,Integer> startPos, Pair<Integer,Integer> endPos){
+        numbers[startPos.posY][startPos.posX] = (numbers[startPos.posY][startPos.posY] + numbers[endPos.posY][endPos.posX])
+                - (numbers[endPos.posY][endPos.posX] = numbers[startPos.posY][startPos.posX]);
+    }
+
+    /**
+     * Method for getting the coordinates of all valid neighbor positions.
+     * @param posX  X coordinate of number to look for it's neighbors
+     * @param posY  Y coordinate of number to look for it's neighbors
+     * @return      An arrayList of coordinates inside the Pair object
+     */
+    public ArrayList<Pair<Integer,Integer>> getNeighbors(int posX, int posY){
+        ArrayList<Pair<Integer,Integer>> n = new ArrayList<>();
+        if(posX + 1 < size){
+            n.add(new Pair<>(posX+1,posY));
+        }
+        if(posX - 1 >= 0){
+            n.add(new Pair<>(posX-1,posY));
+        }
+        if(posY + 1 < size){
+            n.add(new Pair<>(posX,posY+1));
+        }
+        if(posY - 1 >= 0){
+            n.add(new Pair<>(posX,posY-1));
+        }
+        return n;
+    }
+
+    /**
+     * Method for getting a number in the given coordinates
+     * @param posX  X coordinate of the number to get
+     * @param posY  Y coordinate of the number to get
+     * @return  corresponding int value of the position specified
+     */
+    public int getNumber(int posX, int posY){
+        return numbers[posY][posX];
+    }
+
+    /**
+     * Method for getting a number in the given coordinates
+     * @param coordinate  coordinates of the number to get
+     * @return  corresponding int value of the position specified
+     */
+    public int getNumber(Pair<Integer,Integer> coordinate){
+        return numbers[coordinate.posY][coordinate.posX];
+    }
+
+    public void printGraph(){
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                System.out.print(numbers[i][j] + "\t");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
 
 }
+

@@ -10,14 +10,22 @@ public class PuzzleSolver{
 
 
         Graph g = new Graph(Solution.Middle_Blank);
+//        Getting the zero position
+        System.out.println(g.getZeroPos());
+        System.out.println(g.getNumber(g.getZeroPos()));
+//        Example of moving a number
         g.printGraph();
         g.moveNumber(0,0,0,1);
         g.printGraph();
-        g.moveNumber(0,0,2,2);
+//        Example of moving the zero and getting the position of it
+        System.out.println(g.getZeroPos());
+        g.moveNumber(new Pair<>(0,0), g.getZeroPos());
+        System.out.println(g.getZeroPos());
         g.printGraph();
 
-        for(Pair<Integer,Integer> p : g.getNeighbors(1,1)){
-            System.out.println(g.getNumber(p));
+//        Example of looking for the neighbors of the zero
+        for(Pair<Integer,Integer> p : g.getZeroNeighbors()){
+            System.out.println("Coordinates: " + p.posX + "," + p.posY + " value: "+ g.getNumber(p));
         }
     }
 }

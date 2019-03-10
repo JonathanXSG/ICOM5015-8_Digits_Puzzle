@@ -19,4 +19,11 @@ public class Pair<X,Y> {
                 this.posY.equals(pairObject.posY);
     }
 
+    @Override
+    public String toString() {
+        return "Pair{" +
+                "posX=" + posX +
+                ", posY=" + posY +
+                '}';
+    }
 }

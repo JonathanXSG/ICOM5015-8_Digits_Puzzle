@@ -7,6 +7,7 @@ public class Graph{
     private int[][] numbers;
     private int size;
     private Solution solution;
+    private Pair<Integer, Integer> zeroPos;
 
     /**
      * Constructor for creating a Graph object of size 3x3.
@@ -22,8 +23,10 @@ public class Graph{
     private void createBoard() {
         if (solution == Solution.Middle_Blank) {
             numbers = new int[][]{{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
+            zeroPos = new Pair<>(1,1);
         } else {
             numbers = new int[][]{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
+            zeroPos = new Pair<>(0,0);
         }
     }
 
@@ -35,6 +38,10 @@ public class Graph{
      * @param endY      Y coordinate of the place to move the number to
      */
     public void moveNumber(int startX, int startY, int endX, int endY){
+        if(numbers[startY][startX] ==0)
+            zeroPos = new Pair<>(endX,endY);
+        if(numbers[endY][endX] ==0)
+            zeroPos = new Pair<>(startX,startY);
         numbers[startY][startX] = (numbers[startY][startX] + numbers[endY][endX]) - (numbers[endY][endX] = numbers[startY][startX]);
     }
 
@@ -44,6 +51,10 @@ public class Graph{
      * @param endPos    Coordinates in Pair of the place to move the number to
      */
     public void moveNumber(Pair<Integer,Integer> startPos, Pair<Integer,Integer> endPos){
+        if(startPos == zeroPos)
+            zeroPos = endPos;
+        if(endPos == zeroPos)
+            zeroPos = startPos;
         numbers[startPos.posY][startPos.posX] = (numbers[startPos.posY][startPos.posY] + numbers[endPos.posY][endPos.posX])
                 - (numbers[endPos.posY][endPos.posX] = numbers[startPos.posY][startPos.posX]);
     }
@@ -72,6 +83,28 @@ public class Graph{
     }
 
     /**
+     * Method for getting the coordinates of all valid neighbor positions around the zero or empty space
+     * @return      An arrayList of coordinates inside the Pair object
+     */
+    public ArrayList<Pair<Integer,Integer>> getZeroNeighbors(){
+        ArrayList<Pair<Integer,Integer>> n = new ArrayList<>();
+        if(zeroPos.posX + 1 < size){
+            n.add(new Pair<>(zeroPos.posX+1, zeroPos.posY));
+        }
+        if(zeroPos.posX - 1 >= 0){
+            n.add(new Pair<>(zeroPos.posX-1, zeroPos.posY));
+        }
+        if(zeroPos.posY + 1 < size){
+            n.add(new Pair<>(zeroPos.posX, zeroPos.posY+1));
+        }
+        if(zeroPos.posY - 1 >= 0){
+            n.add(new Pair<>(zeroPos.posX, zeroPos.posY-1));
+        }
+        return n;
+    }
+
+
+    /**
      * Method for getting a number in the given coordinates
      * @param posX  X coordinate of the number to get
      * @param posY  Y coordinate of the number to get
@@ -88,6 +121,10 @@ public class Graph{
      */
     public int getNumber(Pair<Integer,Integer> coordinate){
         return numbers[coordinate.posY][coordinate.posX];
+    }
+
+    public Pair<Integer, Integer> getZeroPos(){
+        return zeroPos;
     }
 
     public void printGraph(){

@@ -4,16 +4,27 @@ import java.util.Random;
 public class Puzzle{
     private Graph currentBoard;
     private Solution solutionType;
-    private int cost = 0;
+    private int gCost = 0;
+    private int hCost = 0;
 
+    /**
+     * Default constructor for the puzzle.
+     * @param solution The solved state selected.
+     */
     public Puzzle(Solution solution){
         this.currentBoard = new Graph(solution);
         this.solutionType = solution;
     }
 
-    public Puzzle(Graph graph){
-        this.currentBoard = graph;
-        this.solutionType = graph.getSolution();
+    /**
+     * Constructor for creating a copy of a puzzle.
+     * It copies the board from the parent and the gCost.
+     * @param parentPuzzle Puzzle object to copy
+     */
+    public Puzzle(Puzzle parentPuzzle){
+        this.currentBoard = new Graph(parentPuzzle.currentBoard);
+        this.solutionType = parentPuzzle.getSolutionType();
+        this.gCost = parentPuzzle.gCost;
     }
 
     /**
@@ -25,7 +36,7 @@ public class Puzzle{
         ArrayList<Pair<Integer, Integer>> neighbors;
         for(int i=0; i<randomSteps; i++){
             neighbors = currentBoard.getZeroNeighbors();
-            moveZero(neighbors.get(rand.nextInt(neighbors.size())));
+            currentBoard.moveNumber(currentBoard.getZeroPos(),neighbors.get(rand.nextInt(neighbors.size())));
         }
     }
 
@@ -57,11 +68,11 @@ public class Puzzle{
     }
 
 
-    public void calcScore(Puzzle solvedPuzzle) throws Exception {
-        cost = 0;
+    public void calcGScore(Puzzle solvedPuzzle) throws Exception {
+        hCost = 0;
         for (int i = 0; i < currentBoard.getSize(); i++)
             for (int j = 0; j < currentBoard.getSize(); j++)
-                cost += findManhattanDistance(solvedPuzzle, new Pair<>(j, i));
+                hCost += findManhattanDistance(solvedPuzzle, new Pair<>(j, i));
     }
 
     /**
@@ -75,15 +86,14 @@ public class Puzzle{
 
     /**
      * Wrapper method for moving the zero or blank space.
-     * The method doesn't check if the position is a valid neighbor, it's left to implementation
+     * The method checks if the position is a valid neighbor, also increments the gCost by one (1)
      * @param coordinates Valid neighbor positions to move the zero to
      */
-    public void moveZero(Pair<Integer,Integer> coordinates){
+    public void moveZero(Pair<Integer,Integer> coordinates) throws Exception {
+        if(!currentBoard.getZeroNeighbors().contains(coordinates))
+            throw new Exception("moveZero: Coordinates given are not neighbors of the zero: "+coordinates);
         currentBoard.moveNumber(currentBoard.getZeroPos(),coordinates);
-    }
-
-    public int getCost() {
-        return cost;
+        gCost++;
     }
 
     /**
@@ -109,6 +119,22 @@ public class Puzzle{
      */
     public ArrayList<Pair<Integer, Integer>> getNeighborsOfZero(){
         return currentBoard.getZeroNeighbors();
+    }
+
+    public int getgCost() {
+        return gCost;
+    }
+
+    public void setgCost(int gCost) {
+        this.gCost = gCost;
+    }
+
+    public int gethCost() {
+        return hCost;
+    }
+
+    public Solution getSolutionType() {
+        return solutionType;
     }
 
     public void printBoard(){

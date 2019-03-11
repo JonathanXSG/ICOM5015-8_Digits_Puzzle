@@ -19,12 +19,30 @@ public class Graph{
         this.solution = solution;
         createBoard();
     }
+    public static void arrayCopy(int[][] aSource, int[][] aDestination) {
+        for (int i = 0; i < aSource.length; i++) {
+            System.arraycopy(aSource[i], 0, aDestination[i], 0, aSource[i].length);
+        }
+    }
+
+    public Graph(Graph graph){
+        numbers = new int[3][3];
+        for(int i = 0; i < graph.numbers.length; i++)
+            System.arraycopy(graph.numbers[i], 0, numbers[i], 0, graph.numbers[i].length);
+        this.size = 3;
+        this.solution = graph.solution;
+        if (solution == Solution.Middle_Blank)
+            zeroPos = new Pair<>(1,1);
+        else
+            zeroPos = new Pair<>(0,0);
+    }
 
     private void createBoard() {
         if (solution == Solution.Middle_Blank) {
             numbers = new int[][]{{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
             zeroPos = new Pair<>(1,1);
-        } else {
+        }
+        else {
             numbers = new int[][]{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
             zeroPos = new Pair<>(0,0);
         }
@@ -40,7 +58,7 @@ public class Graph{
     public void moveNumber(int startX, int startY, int endX, int endY){
         if(numbers[startY][startX] ==0)
             zeroPos = new Pair<>(endX,endY);
-        if(numbers[endY][endX] ==0)
+        else if(numbers[endY][endX] ==0)
             zeroPos = new Pair<>(startX,startY);
         numbers[startY][startX] = (numbers[startY][startX] + numbers[endY][endX]) - (numbers[endY][endX] = numbers[startY][startX]);
     }
@@ -53,10 +71,21 @@ public class Graph{
     public void moveNumber(Pair<Integer,Integer> startPos, Pair<Integer,Integer> endPos){
         if(startPos == zeroPos)
             zeroPos = endPos;
-        if(endPos == zeroPos)
+        else if(endPos == zeroPos)
             zeroPos = startPos;
-        numbers[startPos.posY][startPos.posX] = (numbers[startPos.posY][startPos.posY] + numbers[endPos.posY][endPos.posX])
+        numbers[startPos.posY][startPos.posX] = (numbers[startPos.posY][startPos.posX] + numbers[endPos.posY][endPos.posX])
                 - (numbers[endPos.posY][endPos.posX] = numbers[startPos.posY][startPos.posX]);
+    }
+
+    public Pair<Integer,Integer> findNumber(int number){
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if(numbers[i][j] == number){
+                    return new Pair<>(j, i);
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -125,6 +154,14 @@ public class Graph{
 
     public Pair<Integer, Integer> getZeroPos(){
         return zeroPos;
+    }
+
+    public Solution getSolution() {
+        return solution;
+    }
+
+    public int getSize() {
+        return size;
     }
 
     public void printGraph(){

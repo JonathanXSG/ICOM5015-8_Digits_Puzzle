@@ -8,24 +8,37 @@ public class PuzzleSolver{
 //        Solve  board
 //        Show steps for solving board
 
+        Solution selectedSolution = Solution.Middle_Blank;
+        int randomSteps = 20;
 
-        Graph g = new Graph(Solution.Middle_Blank);
-//        Getting the zero position
-        System.out.println(g.getZeroPos());
-        System.out.println(g.getNumber(g.getZeroPos()));
-//        Example of moving a number
-        g.printGraph();
-        g.moveNumber(0,0,0,1);
-        g.printGraph();
-//        Example of moving the zero and getting the position of it
-        System.out.println(g.getZeroPos());
-        g.moveNumber(new Pair<>(0,0), g.getZeroPos());
-        System.out.println(g.getZeroPos());
-        g.printGraph();
+        Puzzle solvedPuzzle = new Puzzle(selectedSolution);
+        Puzzle puzzleToSolve = new Puzzle(selectedSolution);
+        puzzleToSolve.randomizeBoard(randomSteps);
+
+//        Getting the zero position and getting values of positions
+        System.out.println(puzzleToSolve.getZeroPos()+ "   "+puzzleToSolve.getValueInPos(puzzleToSolve.getZeroPos()));
 
 //        Example of looking for the neighbors of the zero
-        for(Pair<Integer,Integer> p : g.getZeroNeighbors()){
-            System.out.println("Coordinates: " + p.posX + "," + p.posY + " value: "+ g.getNumber(p));
+        for(Pair<Integer,Integer> p : puzzleToSolve.getNeighborsOfZero()){
+            System.out.println("Coordinates: " + p.posX + "," + p.posY + " value: "+ puzzleToSolve.getValueInPos(p));
         }
+
+//        Example of moving the zero
+        puzzleToSolve.printBoard();
+        puzzleToSolve.moveZero(puzzleToSolve.getNeighborsOfZero().get(0));
+        System.out.println(puzzleToSolve.getZeroPos());
+        puzzleToSolve.printBoard();
+
+        for(Pair<Integer,Integer> p : puzzleToSolve.getNeighborsOfZero()){
+            System.out.println("Coordinates: " + p.posX + "," + p.posY + " value: "+ puzzleToSolve.getValueInPos(p));
+        }
+
+        System.out.println(puzzleToSolve.findNumber(2));
+        try {
+            System.out.println(puzzleToSolve.findManhattanDistance(solvedPuzzle, puzzleToSolve.findNumber(2)));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 }

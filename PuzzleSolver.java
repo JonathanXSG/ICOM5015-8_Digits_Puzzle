@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.PriorityQueue;
 
 public class PuzzleSolver{
 
@@ -22,7 +24,12 @@ public class PuzzleSolver{
 //        Solve  board
 //        Show steps for solving board
 
-        example();
+        try {
+			aStarSolve();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     static void example (){
 
@@ -71,5 +78,39 @@ public class PuzzleSolver{
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    static void aStarSolve() throws Exception {
+    	PriorityQueue<Puzzle> frontier = new PriorityQueue<Puzzle>((a, b) -> (a.getgCost() + a.gethCost()) - (b.getgCost() + b.gethCost()));
+    	//PriorityQueue<Node> frontier2 = new PriorityQueue<Node>((a, b) -> (a.getPathCost()) - (b.getPathCost()));
+    	ArrayList<Puzzle> explored = new ArrayList<Puzzle>();
+    	
+    	
+    	frontier.add(new Puzzle(puzzleToSolve));
+    	
+    	while(true) {
+    		if(frontier.isEmpty()) return;
+    		Puzzle node = frontier.remove();
+    		if(node.equals(solvedPuzzle)) return;
+    		for(Pair<Integer, Integer> p: node.getNeighborsOfZero()) {
+    			Puzzle child = new Puzzle(node);
+				child.moveZero(p);			
+    			if(!explored.contains(child) && !frontier.contains(child)) {
+    				frontier.add(child);
+    			}else if(frontier.contains(child)){
+    				for(Puzzle e: frontier) {
+    					if(e.equals(child)) {
+    						if((e.getgCost() + e.gethCost()) > (child.getgCost() + child.gethCost())) {
+    							frontier.remove(e);
+    							frontier.add(child);
+    						}
+    					}
+    					break;
+    				}
+    			}
+    		}
+    		explored.add(node);    		
+    	}
+    	
     }
 }

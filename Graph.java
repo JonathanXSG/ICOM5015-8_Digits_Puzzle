@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Data structure for holding and manipulating the board
@@ -162,6 +164,25 @@ public class Graph{
 
     public int getSize() {
         return size;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Graph graph = (Graph) o;
+        return size == graph.size &&
+                Arrays.equals(numbers, graph.numbers) &&
+                solution == graph.solution &&
+                Objects.equals(zeroPos, graph.zeroPos);
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(size, solution, zeroPos);
+        result = 31 * result + Arrays.hashCode(numbers);
+        return result;
     }
 
     public void printGraph(){

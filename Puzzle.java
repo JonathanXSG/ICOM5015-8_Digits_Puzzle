@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 public class Puzzle{
@@ -141,5 +142,17 @@ public class Puzzle{
         currentBoard.printGraph();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Puzzle puzzle = (Puzzle) o;
+        return Objects.equals(currentBoard, puzzle.currentBoard);
+    }
 
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(currentBoard);
+    }
 }

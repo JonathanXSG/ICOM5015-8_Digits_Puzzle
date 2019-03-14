@@ -2,6 +2,11 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
 
+/**
+ * Class for holding and manipulating the board
+ * @author Victor, Jonathan, Eduardo
+ *
+ */
 public class Puzzle{
     private Graph currentBoard;
     private Solution solutionType;

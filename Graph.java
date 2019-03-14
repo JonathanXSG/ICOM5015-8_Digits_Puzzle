@@ -4,6 +4,8 @@ import java.util.Objects;
 
 /**
  * Data structure for holding and manipulating the board
+ * @author Victor, Jonathan, Eduardo
+ *
  */
 public class Graph{
     private int[][] numbers;
@@ -41,9 +43,13 @@ public class Graph{
             numbers = new int[][]{{1, 2, 3}, {8, 0, 4}, {7, 6, 5}};
             zeroPos = new Pair<>(1,1);
         }
-        else {
+        else if(solution == Solution.Top_Left_Blank) {
             numbers = new int[][]{{0, 1, 2}, {3, 4, 5}, {6, 7, 8}};
             zeroPos = new Pair<>(0,0);
+        }
+        else {
+            numbers = new int[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
+            zeroPos = new Pair<>(2,2);
         }
     }
 

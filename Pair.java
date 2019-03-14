@@ -1,3 +1,8 @@
+/**
+ * Class for holding the coordinates
+ * @author Victor, Jonathan, Eduardo
+ *
+ */
 public class Pair<X,Y> {
 
     public final X posX;

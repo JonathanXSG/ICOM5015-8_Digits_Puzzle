@@ -3,12 +3,19 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
+
+/**
+ * Main class for solving the problem
+ * @author Victor, Jonathan, Eduardo
+ *
+ */
 public class PuzzleSolver{
 
     static private Solution selectedSolution;
     static private int randomSteps;
     static private Puzzle solvedPuzzle;
     static private Puzzle puzzleToSolve;
+    static private int steps = 0;
 
     public static void main(String[] args) {
 //        Ask user for which solved state to use
@@ -16,7 +23,7 @@ public class PuzzleSolver{
         String input = "";
         while (checkNumber(input) == 0){
             System.out.println("Select Solution type: ");
-            System.out.println("   [1] Top Left Blank Space  ,  [2] Middle Blank Space");
+            System.out.println("   [1] Top Left Blank Space  ,  [2] Middle Blank Space  ,  [3] Bottom Right Blank Space");
             input= reader.nextLine();
         }
 
@@ -24,6 +31,8 @@ public class PuzzleSolver{
             selectedSolution = Solution.Top_Left_Blank;
         else if(Integer.parseInt(input) == 2)
             selectedSolution = Solution.Middle_Blank;
+        else if(Integer.parseInt(input) == 3)
+            selectedSolution = Solution.Bottom_Right_blank;
 
 //        Initialize board with the solved state
         solvedPuzzle = new Puzzle(selectedSolution);
@@ -31,7 +40,7 @@ public class PuzzleSolver{
 
         input = "";
 //        Ask user for how many moves to randomize the board
-        while (checkNumber(input) == 0){
+        while (checkNumber2(input) == 0){
             System.out.println("How many random steps? ");
             input= reader.nextLine();
         }
@@ -50,67 +59,18 @@ public class PuzzleSolver{
 			e.printStackTrace();
 		}
 
-//		while(lastNode.getParentNode() != null){
-//            System.out.println(lastNode.getAction());
-//            lastNode.getState().printBoard();
-//            lastNode = lastNode.getParentNode();
-//        }
         recursivePrintTree(lastNode);
-        
+        System.out.println("Number of step taken: " +steps);
     }
-    static void example (){
-
-//        Getting the zero position and getting values of positions
-        System.out.println(puzzleToSolve.getZeroPos()+ "   "+puzzleToSolve.getValueInPos(puzzleToSolve.getZeroPos()));
-
-//        Example of looking for the neighbors of the zero
-        for(Pair<Integer,Integer> p : puzzleToSolve.getNeighborsOfZero()){
-            System.out.println("Coordinates: " + p.posX + "," + p.posY + " value: "+ puzzleToSolve.getValueInPos(p));
-        }
-
-//        Example of moving the zero
-        puzzleToSolve.printBoard();
-        try {
-            puzzleToSolve.calcHScore(solvedPuzzle);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("initial h(x) cost " +  puzzleToSolve.gethCost());
-        System.out.println("Initial g(x) cost " +  puzzleToSolve.getgCost());
-        System.out.println("Initial zero position: "+puzzleToSolve.getZeroPos());
-        try {
-            puzzleToSolve.moveZero(puzzleToSolve.getNeighborsOfZero().get(0));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("New zero position: "+puzzleToSolve.getZeroPos());
-        puzzleToSolve.printBoard();
-        try {
-            puzzleToSolve.calcHScore(solvedPuzzle);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println("h(x) cost " +  puzzleToSolve.gethCost());
-        System.out.println("g(x) cost " +  puzzleToSolve.getgCost());
-
-        System.out.println();
-        System.out.println("Neighbors of zero: ");
-        for(Pair<Integer,Integer> p : puzzleToSolve.getNeighborsOfZero()){
-            System.out.println("Coordinates: " + p.posX + "," + p.posY + " value: "+ puzzleToSolve.getValueInPos(p));
-        }
-
-        System.out.println("Coordinates of number 2: "+ puzzleToSolve.findNumber(2));
-        try {
-            System.out.println("Manhattan distance of number 2: "+ puzzleToSolve.findManhattanDistance(solvedPuzzle, puzzleToSolve.findNumber(2)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
 
     static int checkNumber(String str) {
         int result = str.matches("^\\d+$") ? Integer.parseInt(str) : 0;
-        if(result < 1 || result > 2) result =0;
+        if(result < 1 || result > 3) result =0;
+        return result;
+    }
+
+    static int checkNumber2(String str) {
+        int result = str.matches("^\\d+$") ? Integer.parseInt(str) : 0;
         return result;
     }
 
@@ -126,6 +86,7 @@ public class PuzzleSolver{
             Node node = frontier.remove();
             explored.add(node);
             if(node.getState().equals(solvedPuzzle)) {
+                System.out.println("Number of nodes explored: "+explored.size());
                 return node;
             }
             for(Pair<Integer, Integer> p: node.getState().getNeighborsOfZero()){
@@ -152,6 +113,7 @@ public class PuzzleSolver{
     }
     
     static void recursivePrintTree(Node node) {
+        steps++;
     	if(!(node.getParentNode() == null)) {
     		recursivePrintTree(node.getParentNode());
     	}

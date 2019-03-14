@@ -48,17 +48,16 @@ public class PuzzleSolver{
 
 //        Randomize board
         puzzleToSolve.randomizeBoard(randomSteps);
-//        Solve  board
-//        Show steps for solving board
 
+//        Solve  board
         Node lastNode = new Node();
         try {
             lastNode = aStarSolve();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
+//		Show steps for solving board
         recursivePrintTree(lastNode);
         System.out.println("Number of step taken: " +steps);
     }
@@ -86,6 +85,7 @@ public class PuzzleSolver{
             Node node = frontier.remove();
             explored.add(node);
             if(node.getState().equals(solvedPuzzle)) {
+                System.out.println("Number of nodes expanded: "+(frontier.size()+explored.size()));
                 System.out.println("Number of nodes explored: "+explored.size());
                 return node;
             }
@@ -117,7 +117,7 @@ public class PuzzleSolver{
     	if(!(node.getParentNode() == null)) {
     		recursivePrintTree(node.getParentNode());
     	}
-    	System.out.println(node.getAction());
-    	node.getState().printBoard();
+    	System.out.println(node.getAction() + "   g(x)= "+node.getState().getgCost() + " h(x)= "+node.getState().gethCost());
+        node.getState().printBoard();
     }
 }

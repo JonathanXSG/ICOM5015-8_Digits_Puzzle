@@ -1,11 +1,9 @@
 import java.util.Objects;
 
 /**
- * Class for holding information about the steps taken in Solving the puzzle 
+ * Class for holding the puzzle and the parent
  * @author Victor, Jonathan, Eduardo
- *
  */
-
 public class Node {
 	
 	private Puzzle state;
@@ -21,7 +19,6 @@ public class Node {
 	 * @param coordinates Final coordinates of the movement done in the puzzle
 	 */
 	public Node(Puzzle currentState, Node parent, String action, Pair<Integer,Integer> coordinates) {
-		// TODO Auto-generated constructor stub
 		state = currentState;
 		parentNode = parent;
 		actionTaken = action;

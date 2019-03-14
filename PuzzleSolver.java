@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public class PuzzleSolver{
@@ -44,7 +45,7 @@ public class PuzzleSolver{
 //        Example of moving the zero
         puzzleToSolve.printBoard();
         try {
-            puzzleToSolve.calcGScore(solvedPuzzle);
+            puzzleToSolve.calcHScore(solvedPuzzle);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,7 +60,7 @@ public class PuzzleSolver{
         System.out.println("New zero position: "+puzzleToSolve.getZeroPos());
         puzzleToSolve.printBoard();
         try {
-            puzzleToSolve.calcGScore(solvedPuzzle);
+            puzzleToSolve.calcHScore(solvedPuzzle);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -80,37 +81,41 @@ public class PuzzleSolver{
         }
     }
     
-    static void aStarSolve() throws Exception {
-    	PriorityQueue<Puzzle> frontier = new PriorityQueue<Puzzle>((a, b) -> (a.getgCost() + a.gethCost()) - (b.getgCost() + b.gethCost()));
-    	//PriorityQueue<Node> frontier2 = new PriorityQueue<Node>((a, b) -> (a.getPathCost()) - (b.getPathCost()));
-    	ArrayList<Puzzle> explored = new ArrayList<Puzzle>();
-    	
-    	
-    	frontier.add(new Puzzle(puzzleToSolve));
-    	
-    	while(true) {
-    		if(frontier.isEmpty()) return;
-    		Puzzle node = frontier.remove();
-    		if(node.equals(solvedPuzzle)) return;
-    		for(Pair<Integer, Integer> p: node.getNeighborsOfZero()) {
-    			Puzzle child = new Puzzle(node);
-				child.moveZero(p);			
-    			if(!explored.contains(child) && !frontier.contains(child)) {
-    				frontier.add(child);
-    			}else if(frontier.contains(child)){
-    				for(Puzzle e: frontier) {
-    					if(e.equals(child)) {
-    						if((e.getgCost() + e.gethCost()) > (child.getgCost() + child.gethCost())) {
-    							frontier.remove(e);
-    							frontier.add(child);
-    						}
-    					}
-    					break;
-    				}
-    			}
-    		}
-    		explored.add(node);    		
-    	}
-    	
+    static Node aStarSolve() throws Exception {
+    	PriorityQueue<Node> frontier = new PriorityQueue<>(Comparator.comparingInt(a -> (a.getPathCost())));
+        ArrayList<Node> explored = new ArrayList<>();
+        frontier.add(new Node(puzzleToSolve, null, null, puzzleToSolve.getZeroPos()));
+
+        while(true) {
+            if(frontier.isEmpty()) {
+                return null;
+            }
+            Node node = frontier.remove();
+            if(node.getState().equals(solvedPuzzle)) {
+                return node;
+            }
+            for(Pair<Integer, Integer> p: node.getState().getNeighborsOfZero()){
+            	if(!p.equals(node.getCoordinates())) {
+            		Node child = new Node(new Puzzle(node.getState()), node, "Move zero from"+node.getCoordinates()+" to "+p, p);
+            		child.getState().moveZero(p);
+            		child.getState().calcHScore(solvedPuzzle);
+            		if(!explored.contains(child) && !frontier.contains(child)) {
+            			frontier.add(child);
+            		}else if(frontier.contains(child)){
+            			for(Node e: frontier) {
+            				if(e.equals(child)) {
+            					if(e.getPathCost() > child.getPathCost()) {
+            						frontier.remove(e);
+            						frontier.add(child);
+            					}
+            				}
+            				break;
+            			}
+            		}
+            	}                
+            }
+            explored.add(node);
+            System.out.println(explored);
+        }
     }
 }

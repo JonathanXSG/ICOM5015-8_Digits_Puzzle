@@ -69,7 +69,7 @@ public class Puzzle{
     }
 
 
-    public void calcGScore(Puzzle solvedPuzzle) throws Exception {
+    public void calcHScore(Puzzle solvedPuzzle) throws Exception {
         hCost = 0;
         for (int i = 0; i < currentBoard.getSize(); i++)
             for (int j = 0; j < currentBoard.getSize(); j++)

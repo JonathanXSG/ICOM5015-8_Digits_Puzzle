@@ -3,3 +3,9 @@
 .project
 .class
 .classpath
+/Graph.class
+/Node.class
+/Puzzle.class
+/PuzzleSolver.class
+/Pair.class
+/Solution.class

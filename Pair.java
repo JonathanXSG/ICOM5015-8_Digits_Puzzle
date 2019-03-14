@@ -21,9 +21,8 @@ public class Pair<X,Y> {
 
     @Override
     public String toString() {
-        return "Pair{" +
-                "posX=" + posX +
-                ", posY=" + posY +
-                '}';
+        return "[X=" + posX +
+                ", Y=" + posY +
+                ']';
     }
 }

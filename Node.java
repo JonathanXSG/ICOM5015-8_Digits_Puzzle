@@ -29,7 +29,10 @@ public class Node {
 		actionTaken = action;
 		coordinatesMove = coordinates;
 	}
-	
+
+	public Node() {
+	}
+
 	/**
 	 * Method for finding the node that is the parent of the current node
 	 * @return Current Node's Parent Node

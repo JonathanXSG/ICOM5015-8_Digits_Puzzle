@@ -33,10 +33,7 @@ public class Graph{
             System.arraycopy(graph.numbers[i], 0, numbers[i], 0, graph.numbers[i].length);
         this.size = 3;
         this.solution = graph.solution;
-        if (solution == Solution.Middle_Blank)
-            zeroPos = new Pair<>(1,1);
-        else
-            zeroPos = new Pair<>(0,0);
+        this.zeroPos = graph.getZeroPos();
     }
 
     private void createBoard() {
@@ -172,9 +169,19 @@ public class Graph{
         if (o == null || getClass() != o.getClass()) return false;
         Graph graph = (Graph) o;
         return size == graph.size &&
-                Arrays.equals(numbers, graph.numbers) &&
+                numberEquals(graph.numbers) &&
                 solution == graph.solution &&
                 Objects.equals(zeroPos, graph.zeroPos);
+    }
+
+    private boolean numberEquals(int[][] numbers2){
+        for(int i =0; i<size; i++){
+            for(int j =0; j<size; j++){
+                if(numbers[i][j] != numbers2[i][j])
+                    return false;
+            }
+        }
+        return true;
     }
 
     @Override

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Scanner;
 
 public class PuzzleSolver{
 
@@ -11,26 +12,49 @@ public class PuzzleSolver{
 
     public static void main(String[] args) {
 //        Ask user for which solved state to use
-        selectedSolution = Solution.Middle_Blank;
+        Scanner reader = new Scanner(System.in);
+        String input = "";
+        while (checkNumber(input) == 0){
+            System.out.println("Select Solution type: ");
+            System.out.println("   [1] Top Left Blank Space  ,  [2] Middle Blank Space");
+            input= reader.nextLine();
+        }
+
+        if(Integer.parseInt(input) == 1)
+            selectedSolution = Solution.Top_Left_Blank;
+        else if(Integer.parseInt(input) == 2)
+            selectedSolution = Solution.Middle_Blank;
 
 //        Initialize board with the solved state
         solvedPuzzle = new Puzzle(selectedSolution);
         puzzleToSolve = new Puzzle(selectedSolution);
 
+        input = "";
 //        Ask user for how many moves to randomize the board
-        randomSteps = 20;
+        while (checkNumber(input) == 0){
+            System.out.println("How many random steps? ");
+            input= reader.nextLine();
+        }
+        randomSteps = Integer.parseInt(input);
 
 //        Randomize board
         puzzleToSolve.randomizeBoard(randomSteps);
 //        Solve  board
 //        Show steps for solving board
 
+        Node lastNode = new Node();
         try {
-			aStarSolve();
+            lastNode = aStarSolve();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		while(lastNode.getParentNode() != null){
+            System.out.println(lastNode.getAction());
+            lastNode.getState().printBoard();
+            lastNode = lastNode.getParentNode();
+        }
     }
     static void example (){
 
@@ -80,23 +104,31 @@ public class PuzzleSolver{
             e.printStackTrace();
         }
     }
-    
+
+
+    static int checkNumber(String str) {
+        int result = str.matches("^\\d+$") ? Integer.parseInt(str) : 0;
+        if(result < 1 || result > 2) result =0;
+        return result;
+    }
+
     static Node aStarSolve() throws Exception {
     	PriorityQueue<Node> frontier = new PriorityQueue<>(Comparator.comparingInt(a -> (a.getPathCost())));
         ArrayList<Node> explored = new ArrayList<>();
-        frontier.add(new Node(puzzleToSolve, null, null, puzzleToSolve.getZeroPos()));
+        frontier.add(new Node(puzzleToSolve, null, "Starting position", puzzleToSolve.getZeroPos()));
 
         while(true) {
             if(frontier.isEmpty()) {
                 return null;
             }
             Node node = frontier.remove();
+            explored.add(node);
             if(node.getState().equals(solvedPuzzle)) {
                 return node;
             }
             for(Pair<Integer, Integer> p: node.getState().getNeighborsOfZero()){
             	if(!p.equals(node.getCoordinates())) {
-            		Node child = new Node(new Puzzle(node.getState()), node, "Move zero from"+node.getCoordinates()+" to "+p, p);
+            		Node child = new Node(new Puzzle(node.getState()), node, "Move zero from "+node.getCoordinates()+" to "+p, p);
             		child.getState().moveZero(p);
             		child.getState().calcHScore(solvedPuzzle);
             		if(!explored.contains(child) && !frontier.contains(child)) {
@@ -114,8 +146,6 @@ public class PuzzleSolver{
             		}
             	}                
             }
-            explored.add(node);
-            System.out.println(explored);
         }
     }
 }

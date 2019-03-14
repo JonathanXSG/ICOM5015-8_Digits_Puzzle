@@ -10,7 +10,6 @@ public class Node {
 	private Puzzle state;
 	private Node parentNode;
 	private String actionTaken;
-	private int pathCost;
 	private Pair<Integer,Integer> coordinatesMove;
 	
 	/**
@@ -23,12 +22,11 @@ public class Node {
 	 */
 	
 
-	public Node(Puzzle currentState, Node parent, String action, int cost, Pair<Integer,Integer> coordinates) {
+	public Node(Puzzle currentState, Node parent, String action, Pair<Integer,Integer> coordinates) {
 		// TODO Auto-generated constructor stub
 		state = currentState;
 		parentNode = parent;
 		actionTaken = action;
-		pathCost = cost;
 		coordinatesMove = coordinates;
 	}
 	
@@ -75,17 +73,9 @@ public class Node {
 	 */
 
 	public int getPathCost(){
-		return pathCost;
+		return state.getgCost() + state.gethCost();
 	}
 	
-	/**
-	 * Method for setting an arbitrary path cost to a node
-	 * @param newCost abitrary value to be set to the node
-	 */
-	
-	public void setPathCost(int newCost){
-		pathCost = newCost;
-	}
 	
 	/**
 	 * Method for getting the action done by the parent to get to this node

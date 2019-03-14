@@ -50,11 +50,13 @@ public class PuzzleSolver{
 			e.printStackTrace();
 		}
 
-		while(lastNode.getParentNode() != null){
-            System.out.println(lastNode.getAction());
-            lastNode.getState().printBoard();
-            lastNode = lastNode.getParentNode();
-        }
+//		while(lastNode.getParentNode() != null){
+//            System.out.println(lastNode.getAction());
+//            lastNode.getState().printBoard();
+//            lastNode = lastNode.getParentNode();
+//        }
+        recursivePrintTree(lastNode);
+        
     }
     static void example (){
 
@@ -147,5 +149,13 @@ public class PuzzleSolver{
             	}                
             }
         }
+    }
+    
+    static void recursivePrintTree(Node node) {
+    	if(!(node.getParentNode() == null)) {
+    		recursivePrintTree(node.getParentNode());
+    	}
+    	System.out.println(node.getAction());
+    	node.getState().printBoard();
     }
 }

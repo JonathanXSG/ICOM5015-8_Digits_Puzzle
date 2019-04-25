@@ -6,7 +6,9 @@ import java.util.Scanner;
 
 /**
  * Main class for solving the problem
- * @author Victor, Jonathan, Eduardo
+ * @author Víctor Fermin 801-12-2550,
+ *      Jonathan X. Santiago Gonzalez 802-14-7616,
+ *      Eduardo A. Perez Vega 802-14-5780
  *
  */
 public class PuzzleSolver{
